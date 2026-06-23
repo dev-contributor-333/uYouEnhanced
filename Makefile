@@ -83,7 +83,7 @@ before-all::
 	fi
 before-all::
 	@if [[ -f $(UYOU_DEB) ]]; then \
-		EXPECTED="962cd761e69f86c2a5a44e885933be2bf1bc5f836f41151320c8ab331ab704a7"; \
+		EXPECTED="0b5539cc898a5a74cb129677e9aca420bd1dfb55dbc06fd01a7dd263e7618b07"; \
 		ACTUAL=$$(shasum -a 256 $(UYOU_DEB) | awk '{print $$1}'); \
 		if [[ "$$ACTUAL" != "$$EXPECTED" ]]; then \
 			$(PRINT_FORMAT_ERROR) "uYou .deb hash mismatch! Expected $$EXPECTED got $$ACTUAL. Aborting."; exit 1; \
