@@ -4,7 +4,6 @@ export SYSROOT = $(SDK_PATH)
 export ARCHS = arm64
 
 export libcolorpicker_ARCHS = arm64
-export libFLEX_ARCHS = arm64
 export Alderis_XCODEOPTS = LD_DYLIB_INSTALL_NAME=@rpath/Alderis.framework/Alderis
 export Alderis_XCODEFLAGS = DYLIB_INSTALL_NAME_BASE=/Library/Frameworks BUILD_LIBRARY_FOR_DISTRIBUTION=YES ARCHS="$(ARCHS)"
 export libcolorpicker_LDFLAGS = -F$(TARGET_PRIVATE_FRAMEWORK_PATH) -install_name @rpath/libcolorpicker.dylib
@@ -35,7 +34,6 @@ $(TWEAK_NAME)_LIBRARIES = bz2 c++ iconv z
 $(TWEAK_NAME)_CFLAGS = -fobjc-arc -Wno-deprecated-declarations -Wno-unused-but-set-variable -DTWEAK_VERSION=\"$(PACKAGE_VERSION)\"
 $(TWEAK_NAME)_INJECT_DYLIBS = \
     Tweaks/uYou/Library/MobileSubstrate/DynamicLibraries/uYou.dylib \
-    $(THEOS_OBJ_DIR)/libFLEX.dylib \
     $(THEOS_OBJ_DIR)/iSponsorBlock.dylib \
     $(THEOS_OBJ_DIR)/YTABConfig.dylib \
     $(THEOS_OBJ_DIR)/YTIcons.dylib \
@@ -82,6 +80,14 @@ before-all::
 	@if [[ ! -f $(UYOU_DEB) ]]; then \
 		rm -rf $(UYOU_PATH)/*; \
 		$(PRINT_FORMAT_BLUE) "Downloading uYou"; \
+	fi
+before-all::
+	@if [[ -f $(UYOU_DEB) ]]; then \
+		EXPECTED="962cd761e69f86c2a5a44e885933be2bf1bc5f836f41151320c8ab331ab704a7"; \
+		ACTUAL=$$(shasum -a 256 $(UYOU_DEB) | awk '{print $$1}'); \
+		if [[ "$$ACTUAL" != "$$EXPECTED" ]]; then \
+			$(PRINT_FORMAT_ERROR) "uYou .deb hash mismatch! Expected $$EXPECTED got $$ACTUAL. Aborting."; exit 1; \
+		fi; \
 	fi
 before-all::
 	@if [[ ! -f $(UYOU_DEB) ]]; then \
