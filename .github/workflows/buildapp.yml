@@ -134,6 +134,7 @@ jobs:
         id: build_package
         run: |
           cd ${{ github.workspace }}/main
+          rm -f Tweaks/uYou/com.miro.uyou_*.deb                  # Purge cached .deb to force fresh download
           sed -i '' "s#^BUNDLE_ID = .*#BUNDLE_ID = ${{ env.BUNDLE_ID }}#g" Makefile                          # Modify the bundle ID
           sed -i '' "s#^DISPLAY_NAME = .*#DISPLAY_NAME = ${{ env.APP_NAME }}#g" Makefile                        # Modify the app name
           sed -i '' "1s#.*#export TARGET = iphone:clang:${{ inputs.sdk_version }}:14.0#g" Makefile # Modify the SDK version
